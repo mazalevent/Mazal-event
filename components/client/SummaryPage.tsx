@@ -75,19 +75,19 @@ export function SummaryPage({ eventType, services, formsData, onBack, onSubmit, 
           </div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-          {c.phone && (
+          {Boolean(c.phone) && (
             <div><span className="lbl">Tel</span><div style={{ fontSize: 14 }}>{String(c.phone)}</div></div>
           )}
-          {c.email && (
+          {Boolean(c.email) && (
             <div><span className="lbl">Email</span><div style={{ fontSize: 14 }}>{String(c.email)}</div></div>
           )}
-          {c.region && (
+          {Boolean(c.region) && (
             <div><span className="lbl">Region</span><div style={{ fontSize: 14 }}>{String(c.region)}</div></div>
           )}
-          {c.guests && (
+          {Boolean(c.guests) && (
             <div><span className="lbl">Invites</span><div style={{ fontSize: 14 }}>{String(c.guests)}</div></div>
           )}
-          {c.budget && (
+          {Boolean(c.budget) && (
             <div style={{ gridColumn: "1/-1" }}>
               <span className="lbl">Budget evenement</span>
               <div style={{ fontSize: 14, color: GOLD, fontWeight: 600 }}>{String(c.budget)}</div>
