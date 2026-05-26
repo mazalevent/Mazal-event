@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { SERVICES, GOLD, DARK, MUTED, type EventType } from "@/lib/constants";
 
 export type RequestRow = {
@@ -20,8 +21,8 @@ type StatusFilter = "all" | RequestRow["status"];
 const STATUS_TABS: { v: StatusFilter; l: string }[] = [
   { v: "all",                   l: "Toutes" },
   { v: "Nouveau",               l: "Nouvelles" },
-  { v: "En selection",          l: "En sélection" },
-  { v: "Propositions envoyees", l: "Envoyées" },
+  { v: "En selection",          l: "En selection" },
+  { v: "Propositions envoyees", l: "Envoyees" },
 ];
 
 const statusStyle = {
@@ -72,77 +73,55 @@ export function RequestList({ requests, error }: { requests: RequestRow[]; error
         {STATUS_TABS.map((tab) => {
           const active = status === tab.v;
           return (
-            <button
-              key={tab.v}
-              onClick={() => setStatus(tab.v)}
-              style={{
-                padding: "8px 16px",
-                borderRadius: 50,
-                border: "1.5px solid " + (active ? GOLD : "#E8DCC8"),
-                background: active ? "linear-gradient(135deg,#FDF8EE,#F7EDD8)" : "white",
-                color: active ? DARK : MUTED,
-                fontFamily: "'Jost',sans-serif",
-                fontSize: 13,
-                fontWeight: active ? 500 : 400,
-                cursor: "pointer",
-              }}
-            >
+            <button key={tab.v} onClick={() => setStatus(tab.v)}
+              style={{ padding: "8px 16px", borderRadius: 50, border: "1.5px solid " + (active ? GOLD : "#E8DCC8"), background: active ? "linear-gradient(135deg,#FDF8EE,#F7EDD8)" : "white", color: active ? DARK : MUTED, fontFamily: "'Jost',sans-serif", fontSize: 13, fontWeight: active ? 500 : 400, cursor: "pointer" }}>
               {tab.l} <span style={{ opacity: .7 }}>({counts[tab.v]})</span>
             </button>
           );
         })}
       </div>
 
-      <input
-        type="search"
-        className="inp"
-        placeholder="Rechercher par nom ou téléphone..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        style={{ marginBottom: 20 }}
-      />
+      <input type="search" className="inp" placeholder="Rechercher par nom ou telephone..."
+        value={query} onChange={(e) => setQuery(e.target.value)} style={{ marginBottom: 20 }} />
 
       {filtered.length === 0 ? (
         <div style={{ textAlign: "center", padding: "60px 0", color: MUTED }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>📭</div>
-          <p>
-            {requests.length === 0
-              ? "Aucune demande pour le moment"
-              : "Aucune demande ne correspond à ces filtres"}
-          </p>
+          <p>{requests.length === 0 ? "Aucune demande pour le moment" : "Aucune demande ne correspond"}</p>
         </div>
       ) : (
         filtered.map((req) => {
-          const ss = statusStyle[req.status] || statusStyle.Nouveau;
+          const ss = statusStyle[req.status] || statusStyle["Nouveau"];
           return (
-            <div key={req.id} className="req-row" style={{ cursor: "default" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <span style={{ fontSize: 28 }}>{req.event_type?.emoji || "?"}</span>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: 16, color: DARK }}>{req.client_name || "Client"}</div>
-                    <div style={{ fontSize: 13, color: MUTED }}>
-                      {req.event_type?.label || ""} {req.client_phone ? " — " + req.client_phone : ""}
-                    </div>
-                    <div style={{ fontSize: 11, color: MUTED, marginTop: 2 }}>
-                      {new Date(req.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-                      {req.region && " · " + req.region}
+            <Link key={req.id} href={"/admin/requests/" + req.id} style={{ textDecoration: "none", display: "block" }}>
+              <div className="req-row" style={{ cursor: "pointer" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <span style={{ fontSize: 28 }}>{req.event_type?.emoji || "?"}</span>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: 16, color: DARK }}>{req.client_name || "Client"}</div>
+                      <div style={{ fontSize: 13, color: MUTED }}>{req.event_type?.label || ""}{req.client_phone ? " — " + req.client_phone : ""}</div>
+                      <div style={{ fontSize: 11, color: MUTED, marginTop: 2 }}>
+                        {new Date(req.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        {req.region && " · " + req.region}
+                      </div>
                     </div>
                   </div>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+                    <span style={{ padding: "4px 12px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: ss.bg, color: ss.col }}>
+                      {req.status}
+                    </span>
+                    <span style={{ fontSize: 12, color: GOLD, fontWeight: 600 }}>Voir →</span>
+                  </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-                  <span style={{ padding: "4px 12px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: ss.bg, color: ss.col }}>
-                    {req.status}
-                  </span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {(req.services || []).map((sid) => {
+                    const sv = SERVICES.find((x) => x.id === sid);
+                    return sv ? <span key={sid} className="badge bg">{sv.emoji} {sv.label}</span> : null;
+                  })}
                 </div>
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {(req.services || []).map((sid) => {
-                  const sv = SERVICES.find((x) => x.id === sid);
-                  return sv ? <span key={sid} className="badge bg">{sv.emoji} {sv.label}</span> : null;
-                })}
-              </div>
-            </div>
+            </Link>
           );
         })
       )}
