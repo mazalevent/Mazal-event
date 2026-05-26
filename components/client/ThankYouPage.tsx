@@ -50,7 +50,7 @@ export function ThankYouPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
-          <div className="badge bg" style={{ marginBottom: 16 }}>Demande envoyee</div>
+          <div className="badge bg" style={{ marginBottom: 16 }}>Demande envoyée</div>
         </motion.div>
 
         <motion.h2
@@ -77,7 +77,7 @@ export function ThankYouPage() {
           transition={{ delay: 1, duration: 0.6 }}
           style={{ color: MUTED, fontSize: 16, lineHeight: 1.75, marginBottom: 8, maxWidth: 420, margin: "0 auto 8px" }}
         >
-          Votre demande a bien ete enregistree.
+          Votre demande a bien été enregistrée.
         </motion.p>
         <motion.p
           initial={{ opacity: 0, y: 12 }}
@@ -85,8 +85,8 @@ export function ThankYouPage() {
           transition={{ delay: 1.15, duration: 0.6 }}
           style={{ color: MUTED, fontSize: 16, lineHeight: 1.75, marginBottom: 40, maxWidth: 420, margin: "0 auto 40px" }}
         >
-          Vous recevrez bientot{" "}
-          <span style={{ color: GOLD, fontWeight: 500 }}>3 propositions selectionnees</span>
+          Vous recevrez bientôt{" "}
+          <span style={{ color: GOLD, fontWeight: 500 }}>3 propositions sélectionnées</span>
           {" "}pour chaque prestation.
         </motion.p>
 
@@ -97,7 +97,7 @@ export function ThankYouPage() {
           style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}
         >
           <Link href="/" className="btn-outline" style={{ display: "inline-block", textDecoration: "none" }}>
-            Retour a l accueil
+            Retour à l'accueil
           </Link>
           <Link href="/demande" style={{ fontSize: 12, color: MUTED, textDecoration: "underline" }}>
             Faire une autre demande

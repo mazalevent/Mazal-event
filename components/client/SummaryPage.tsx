@@ -56,11 +56,11 @@ export function SummaryPage({ eventType, services, formsData, onBack, onSubmit, 
     <div className="page" style={{ padding: "24px 20px", maxWidth: 520, margin: "0 auto" }}>
       <button className="btn-back" onClick={onBack} style={{ marginBottom: 24 }} disabled={submitting}>Retour</button>
       <div style={{ marginBottom: 32 }}>
-        <div className="badge bg" style={{ marginBottom: 12 }}>Etape 4 / 4</div>
+        <div className="badge bg" style={{ marginBottom: 12 }}>Étape 4 / 4</div>
         <h2 className="serif" style={{ fontSize: 34, fontWeight: 300, marginBottom: 8 }}>
-          Votre demande est <em style={{ color: GOLD }}>prete</em>
+          Votre demande est <em style={{ color: GOLD }}>prête</em>
         </h2>
-        <p style={{ color: MUTED, fontSize: 14 }}>Verifiez avant d envoyer</p>
+        <p style={{ color: MUTED, fontSize: 14 }}>Vérifiez avant d'envoyer</p>
       </div>
 
       <div className="card" style={{ marginBottom: 16, cursor: "default" }}>
@@ -89,7 +89,7 @@ export function SummaryPage({ eventType, services, formsData, onBack, onSubmit, 
           )}
           {Boolean(c.budget) && (
             <div style={{ gridColumn: "1/-1" }}>
-              <span className="lbl">Budget evenement</span>
+              <span className="lbl">Budget événement</span>
               <div style={{ fontSize: 14, color: GOLD, fontWeight: 600 }}>{String(c.budget)}</div>
             </div>
           )}
@@ -105,7 +105,7 @@ export function SummaryPage({ eventType, services, formsData, onBack, onSubmit, 
       </div>
 
       <div style={{ marginBottom: 24 }}>
-        <span className="lbl" style={{ display: "block", marginBottom: 12 }}>Prestations - Cliquez pour voir les details</span>
+        <span className="lbl" style={{ display: "block", marginBottom: 12 }}>Prestations — Cliquez pour voir les détails</span>
         {serviceList.map((s) => {
           const d = (formsData.services && formsData.services[s.id]) || {};
           const isOpen = openSvc === s.id;
@@ -132,7 +132,7 @@ export function SummaryPage({ eventType, services, formsData, onBack, onSubmit, 
 
       <div style={{ background: "#FDF8EE", border: "1px solid rgba(201,168,76,.2)", borderRadius: 16, padding: 20, marginBottom: 28, textAlign: "center" }}>
         <div style={{ fontSize: 13, color: MUTED, lineHeight: 1.7 }}>
-          Nous allons selectionner jusqu a 3 propositions adaptees pour chaque prestation.
+          Nous allons sélectionner jusqu'à 3 propositions adaptées pour chaque prestation.
         </div>
       </div>
       {error && (

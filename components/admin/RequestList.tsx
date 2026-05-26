@@ -21,9 +21,15 @@ type StatusFilter = "all" | RequestRow["status"];
 const STATUS_TABS: { v: StatusFilter; l: string }[] = [
   { v: "all",                   l: "Toutes" },
   { v: "Nouveau",               l: "Nouvelles" },
-  { v: "En selection",          l: "En selection" },
-  { v: "Propositions envoyees", l: "Envoyees" },
+  { v: "En selection",          l: "En sélection" },
+  { v: "Propositions envoyees", l: "Envoyées" },
 ];
+
+const STATUS_LABELS: Record<RequestRow["status"], string> = {
+  "Nouveau":               "Nouvelle",
+  "En selection":          "En sélection",
+  "Propositions envoyees": "Envoyée",
+};
 
 const statusStyle = {
   "Nouveau":               { bg: "#EFF6FF", col: "#1D4ED8" },
@@ -81,7 +87,7 @@ export function RequestList({ requests, error }: { requests: RequestRow[]; error
         })}
       </div>
 
-      <input type="search" className="inp" placeholder="Rechercher par nom ou telephone..."
+      <input type="search" className="inp" placeholder="Rechercher par nom ou téléphone..."
         value={query} onChange={(e) => setQuery(e.target.value)} style={{ marginBottom: 20 }} />
 
       {filtered.length === 0 ? (
@@ -109,7 +115,7 @@ export function RequestList({ requests, error }: { requests: RequestRow[]; error
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
                     <span style={{ padding: "4px 12px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: ss.bg, color: ss.col }}>
-                      {req.status}
+                      {STATUS_LABELS[req.status]}
                     </span>
                     <span style={{ fontSize: 12, color: GOLD, fontWeight: 600 }}>Voir →</span>
                   </div>

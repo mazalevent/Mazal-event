@@ -10,6 +10,11 @@ import { PrestatairesTab } from "./PrestatairesTab";
 import { SendClientTab } from "./SendClientTab";
 
 const STATUS_OPTIONS: Status[] = ["Nouveau", "En selection", "Propositions envoyees"];
+const STATUS_LABELS: Record<Status, string> = {
+  "Nouveau":               "Nouvelle",
+  "En selection":          "En sélection",
+  "Propositions envoyees": "Envoyée au client",
+};
 const statusStyle: Record<Status, { bg: string; col: string }> = {
   "Nouveau":               { bg: "#EFF6FF", col: "#1D4ED8" },
   "En selection":          { bg: "#FFF7ED", col: "#C2410C" },
@@ -103,7 +108,7 @@ export function RequestDetail({
   }
 
   const tabs: { id: Tab; label: string }[] = [
-    { id: "details",      label: "Details" },
+    { id: "details",      label: "Détails" },
     { id: "prestataires", label: "Prestataires" },
     { id: "envoyer",      label: "Envoyer client" },
   ];
@@ -128,7 +133,7 @@ export function RequestDetail({
             <span style={{ fontSize: 40 }}>{request.event_type?.emoji || "?"}</span>
             <div>
               <h2 className="serif" style={{ fontSize: 24, fontWeight: 400, color: DARK }}>
-                {request.event_type?.label || "Evenement"}
+                {request.event_type?.label || "Événement"}
               </h2>
               <div style={{ fontSize: 12, color: MUTED, marginTop: 2 }}>
                 {new Date(request.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" })}
@@ -139,7 +144,7 @@ export function RequestDetail({
             <select value={status} disabled={isPending}
               onChange={(e) => handleStatusChange(e.target.value as Status)}
               style={{ border: "1.5px solid " + ss.col, borderRadius: 20, padding: "6px 14px", fontSize: 12, fontFamily: "'Jost',sans-serif", color: ss.col, cursor: "pointer", outline: "none", background: ss.bg, fontWeight: 600, opacity: isPending ? 0.6 : 1 }}>
-              {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+              {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
             </select>
             {statusError && <div style={{ fontSize: 11, color: "#dc2626" }}>{statusError}</div>}
           </div>
@@ -152,7 +157,7 @@ export function RequestDetail({
             {request.client_email && <div style={{ fontSize: 13, color: MUTED }}>{request.client_email}</div>}
           </div>
           {request.client_phone && (
-            <a href={"https://wa.me/" + request.client_phone.replace(/[^0-9]/g, "").replace(/^0/, "972") + "?text=" + encodeURIComponent("Bonjour " + (request.client_name || "") + " ! Suite a votre demande Mazal Event, nous avons selectionne des prestataires pour vous.")}
+            <a href={"https://wa.me/" + request.client_phone.replace(/[^0-9]/g, "").replace(/^0/, "972") + "?text=" + encodeURIComponent("Bonjour " + (request.client_name || "") + " ! Suite à votre demande Mazal Event, nous avons sélectionné des prestataires pour vous.")}
               target="_blank" rel="noreferrer"
               style={{ display: "flex", alignItems: "center", gap: 8, background: "#25D366", color: "white", padding: "10px 20px", borderRadius: 50, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>
               <span>💬</span> Contacter
@@ -173,7 +178,7 @@ export function RequestDetail({
       {tab === "details" && (
         <div>
           <div style={{ background: "white", borderRadius: 20, padding: 24, border: "1.5px solid #EDE0C4", marginBottom: 16 }}>
-            <div className="section-title">Informations generales</div>
+            <div className="section-title">Informations générales</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               {request.region && <div><span className="lbl">Region</span><div style={{ fontSize: 14 }}>📍 {request.region}</div></div>}
               {cDate    && <div><span className="lbl">Date</span><div style={{ fontSize: 14 }}>📅 {cDate}</div></div>}

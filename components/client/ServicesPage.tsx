@@ -21,11 +21,11 @@ export function ServicesPage({ onConfirm, onBack }: { onConfirm: (selected: stri
     <div className="page" style={{ padding: "24px 20px", maxWidth: 520, margin: "0 auto" }}>
       <button className="btn-back" onClick={onBack} style={{ marginBottom: 24 }}>Retour</button>
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ marginBottom: 28 }}>
-        <div className="badge bg" style={{ marginBottom: 12 }}>Etape 2 / 4</div>
+        <div className="badge bg" style={{ marginBottom: 12 }}>Étape 2 / 4</div>
         <h2 className="serif" style={{ fontSize: 34, fontWeight: 300, marginBottom: 8 }}>
           Vos <em style={{ color: GOLD }}>besoins</em>
         </h2>
-        <p style={{ color: MUTED, fontSize: 14 }}>Selectionnez tout ce dont vous avez besoin</p>
+        <p style={{ color: MUTED, fontSize: 14 }}>Sélectionnez tout ce dont vous avez besoin</p>
       </motion.div>
       <motion.div
         variants={gridVariants}
@@ -61,7 +61,7 @@ export function ServicesPage({ onConfirm, onBack }: { onConfirm: (selected: stri
           style={{ position: "fixed", bottom: 0, left: 0, right: 0, padding: "16px 20px", background: "rgba(253,250,244,.95)", backdropFilter: "blur(12px)", borderTop: "1px solid rgba(201,168,76,.15)" }}
         >
           <button className="btn-gold" onClick={() => onConfirm(selected)}>
-            Continuer - {selected.length} {selected.length > 1 ? "prestations" : "prestation"}
+            Continuer — {selected.length} {selected.length > 1 ? "prestations" : "prestation"}
           </button>
         </motion.div>
       )}

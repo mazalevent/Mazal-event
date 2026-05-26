@@ -54,7 +54,7 @@ export function ServiceFormPage({ service, step, total, onConfirm, onBack }: Pro
         </h2>
       </motion.div>
       <div style={{ marginBottom: 28 }}>
-        <div className="section-title">Niveau souhaite</div>
+        <div className="section-title">Niveau souhaité</div>
         <motion.div
           variants={levelsContainer}
           initial="initial"
@@ -84,7 +84,7 @@ export function ServiceFormPage({ service, step, total, onConfirm, onBack }: Pro
           transition={{ duration: 0.4, delay: 0.4 }}
           style={{ marginBottom: 28 }}
         >
-          <div className="section-title">Vos preferences</div>
+          <div className="section-title">Vos préférences</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {questions.map((q) => (
               <QuestionField key={q.id} q={q} value={data[q.id]} onChange={(v) => set(q.id, v)} />
@@ -98,10 +98,10 @@ export function ServiceFormPage({ service, step, total, onConfirm, onBack }: Pro
         transition={{ duration: 0.4, delay: 0.5 }}
         style={{ marginBottom: 32 }}
       >
-        <span className="lbl">Commentaire specifique</span>
+        <span className="lbl">Commentaire spécifique</span>
         <textarea
           className="inp"
-          placeholder={"Precisions sur " + service.label + "..."}
+          placeholder={"Précisions sur " + service.label + "..."}
           value={(data.comment as string) || ""}
           onChange={(e) => set("comment", e.target.value)}
         />
@@ -113,7 +113,7 @@ export function ServiceFormPage({ service, step, total, onConfirm, onBack }: Pro
         className="btn-gold"
         onClick={() => onConfirm(data)}
       >
-        {step < total - 1 ? "Prestation suivante" : "Voir le resume"}
+        {step < total - 1 ? "Prestation suivante" : "Voir le résumé"}
       </motion.button>
     </div>
   );

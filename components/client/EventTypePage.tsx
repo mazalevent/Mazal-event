@@ -17,11 +17,11 @@ export function EventTypePage({ onSelect, onBack }: { onSelect: (e: EventType) =
     <div className="page" style={{ padding: "24px 20px", maxWidth: 480, margin: "0 auto" }}>
       <button className="btn-back" onClick={onBack} style={{ marginBottom: 32 }}>Retour</button>
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ marginBottom: 32 }}>
-        <div className="badge bg" style={{ marginBottom: 12 }}>Etape 1 / 4</div>
+        <div className="badge bg" style={{ marginBottom: 12 }}>Étape 1 / 4</div>
         <h2 className="serif" style={{ fontSize: 36, fontWeight: 300, marginBottom: 8 }}>
-          Votre <em style={{ color: GOLD }}>evenement</em>
+          Votre <em style={{ color: GOLD }}>événement</em>
         </h2>
-        <p style={{ color: MUTED, fontSize: 14 }}>Quel type de celebration planifiez-vous ?</p>
+        <p style={{ color: MUTED, fontSize: 14 }}>Quel type de célébration planifiez-vous ?</p>
       </motion.div>
       <motion.div
         variants={containerVariants}
