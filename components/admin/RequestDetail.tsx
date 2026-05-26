@@ -5,7 +5,8 @@ import Link from "next/link";
 import { SERVICES, GOLD, DARK, MUTED } from "@/lib/constants";
 import { getFieldLabel } from "@/lib/questions";
 import { updateStatus, type Status } from "@/app/admin/requests/[id]/updateStatus";
-import type { FullRequest } from "@/app/admin/requests/[id]/page";
+import type { FullRequest, PrestataireLite, InviteRow, OffreRow } from "@/app/admin/requests/[id]/page";
+import { PrestatairesTab } from "./PrestatairesTab";
 
 const STATUS_OPTIONS: Status[] = ["Nouveau", "En selection", "Propositions envoyees"];
 const statusStyle: Record<Status, { bg: string; col: string }> = {
@@ -64,7 +65,17 @@ function ServiceDetailPanel({ data }: { data: Record<string, unknown> }) {
   );
 }
 
-export function RequestDetail({ request }: { request: FullRequest }) {
+export function RequestDetail({
+  request,
+  prestataires,
+  invites,
+  offres,
+}: {
+  request: FullRequest;
+  prestataires: PrestataireLite[];
+  invites: InviteRow[];
+  offres: OffreRow[];
+}) {
   const [tab, setTab] = useState<Tab>("details");
   const [status, setStatus] = useState<Status>(request.status);
   const [openSvc, setOpenSvc] = useState<string | null>(null);
@@ -205,11 +216,13 @@ export function RequestDetail({ request }: { request: FullRequest }) {
       )}
 
       {tab === "prestataires" && (
-        <div style={{ background: "#FDF8EE", border: "1px solid rgba(201,168,76,.2)", borderRadius: 16, padding: 24, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 12 }}>&#128679;</div>
-          <div style={{ fontWeight: 500, marginBottom: 8 }}>Phase 4 — En construction</div>
-          <div style={{ fontSize: 13, color: MUTED, lineHeight: 1.6 }}>Inviter des prestataires par email avec un lien unique.</div>
-        </div>
+        <PrestatairesTab
+          requestId={request.id}
+          serviceIds={request.services || []}
+          prestataires={prestataires}
+          invites={invites}
+          offres={offres}
+        />
       )}
 
       {tab === "envoyer" && (

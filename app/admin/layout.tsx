@@ -12,20 +12,28 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <>
-      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 24px", borderBottom: "1px solid rgba(201,168,76,.15)", background: "rgba(253,250,244,.9)", backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 10 }}>
+      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 24px", borderBottom: "1px solid rgba(201,168,76,.15)", background: "rgba(253,250,244,.9)", backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 10, flexWrap: "wrap", gap: 12 }}>
         <Link href="/admin" style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span className="serif" style={{ fontSize: 22, fontWeight: 300 }}>
             Mazal <em style={{ color: GOLD }}>Admin</em>
           </span>
         </Link>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <nav style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          <Link href="/admin" style={{ padding: "6px 14px", borderRadius: 50, fontSize: 13, color: MUTED, textDecoration: "none" }}>
+            Demandes
+          </Link>
+          <Link href="/admin/prestataires" style={{ padding: "6px 14px", borderRadius: 50, fontSize: 13, color: MUTED, textDecoration: "none" }}>
+            Prestataires
+          </Link>
+        </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 12, color: MUTED }}>{user.email}</span>
           <form action={signOut}>
             <button
               type="submit"
               style={{ background: "none", border: "1.5px solid rgba(201,168,76,.4)", color: MUTED, borderRadius: 50, padding: "6px 14px", fontSize: 12, cursor: "pointer", fontFamily: "'Jost',sans-serif" }}
             >
-              Se déconnecter
+              Déconnexion
             </button>
           </form>
         </div>
