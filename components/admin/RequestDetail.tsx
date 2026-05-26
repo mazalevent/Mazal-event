@@ -8,18 +8,19 @@ import { updateStatus, type Status } from "@/app/admin/requests/[id]/updateStatu
 import type { FullRequest } from "@/app/admin/requests/[id]/page";
 
 const STATUS_OPTIONS: Status[] = ["Nouveau", "En selection", "Propositions envoyees"];
-
 const statusStyle: Record<Status, { bg: string; col: string }> = {
   "Nouveau":               { bg: "#EFF6FF", col: "#1D4ED8" },
   "En selection":          { bg: "#FFF7ED", col: "#C2410C" },
   "Propositions envoyees": { bg: "#F0FDF4", col: "#15803D" },
 };
-
 type Tab = "details" | "prestataires" | "envoyer";
+
+function str(v: unknown): string { return v != null ? String(v) : ""; }
+function isArr(v: unknown): v is unknown[] { return Array.isArray(v); }
 
 function ValDisplay({ v }: { v: unknown }) {
   if (v === null || v === undefined || v === "") return <span style={{ color: MUTED, fontStyle: "italic" }}>—</span>;
-  if (Array.isArray(v)) {
+  if (isArr(v)) {
     if (v.length === 0) return <span style={{ color: MUTED, fontStyle: "italic" }}>—</span>;
     return (
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
@@ -28,7 +29,7 @@ function ValDisplay({ v }: { v: unknown }) {
     );
   }
   if (typeof v === "number") return <span>{v} NIS</span>;
-  return <span>{String(v)}</span>;
+  return <span>{str(v)}</span>;
 }
 
 function ServiceDetailPanel({ data }: { data: Record<string, unknown> }) {
@@ -39,7 +40,7 @@ function ServiceDetailPanel({ data }: { data: Record<string, unknown> }) {
       {data.level !== undefined && data.level !== null && (
         <div style={{ marginBottom: 12 }}>
           <span className="lbl">Niveau</span>
-          <span className="badge bg">{String(data.level)}</span>
+          <span className="badge bg">{str(data.level)}</span>
         </div>
       )}
       {entries.map((k) => {
@@ -92,6 +93,12 @@ export function RequestDetail({ request }: { request: FullRequest }) {
     { id: "envoyer",      label: "Envoyer client" },
   ];
 
+  const cDate = typeof c.date === "string" && c.date ? new Date(c.date).toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" }) : null;
+  const cGuests = c.guests != null ? str(c.guests) : null;
+  const cBudget = c.budget != null ? str(c.budget) : null;
+  const cComment = typeof c.comment === "string" && c.comment ? c.comment : null;
+  const cStyle = isArr(c.style) && c.style.length > 0 ? c.style as string[] : null;
+
   return (
     <div className="page" style={{ padding: "24px 20px", maxWidth: 680, margin: "0 auto" }}>
       <Link href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: MUTED, fontSize: 14, textDecoration: "none", marginBottom: 24 }}>
@@ -112,18 +119,13 @@ export function RequestDetail({ request }: { request: FullRequest }) {
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-            <select
-              value={status}
-              disabled={isPending}
-              onChange={(e) => handleStatusChange(e.target.value as Status)}
-              style={{ border: "1.5px solid " + ss.col, borderRadius: 20, padding: "6px 14px", fontSize: 12, fontFamily: "'Jost',sans-serif", color: ss.col, cursor: "pointer", outline: "none", background: ss.bg, fontWeight: 600, opacity: isPending ? 0.6 : 1 }}
-            >
+            <select value={status} disabled={isPending} onChange={(e) => handleStatusChange(e.target.value as Status)}
+              style={{ border: "1.5px solid " + ss.col, borderRadius: 20, padding: "6px 14px", fontSize: 12, fontFamily: "'Jost',sans-serif", color: ss.col, cursor: "pointer", outline: "none", background: ss.bg, fontWeight: 600, opacity: isPending ? 0.6 : 1 }}>
               {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
             {statusError && <div style={{ fontSize: 11, color: "#dc2626" }}>{statusError}</div>}
           </div>
         </div>
-
         <div style={{ background: "#FDF8EE", borderRadius: 14, padding: 16, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
           <div>
             <span className="lbl">Client</span>
@@ -132,12 +134,9 @@ export function RequestDetail({ request }: { request: FullRequest }) {
             {request.client_email && <div style={{ fontSize: 13, color: MUTED }}>{request.client_email}</div>}
           </div>
           {request.client_phone && (
-            <a
-              href={"https://wa.me/" + request.client_phone.replace(/[^0-9]/g, "").replace(/^0/, "972") + "?text=" + encodeURIComponent("Bonjour " + (request.client_name || "") + " ! Suite a votre demande Mazal Event, nous avons selectionne des prestataires pour vous.")}
-              target="_blank"
-              rel="noreferrer"
-              style={{ display: "flex", alignItems: "center", gap: 8, background: "#25D366", color: "white", padding: "10px 20px", borderRadius: 50, fontSize: 14, fontWeight: 500, textDecoration: "none" }}
-            >
+            <a href={"https://wa.me/" + request.client_phone.replace(/[^0-9]/g, "").replace(/^0/, "972") + "?text=" + encodeURIComponent("Bonjour " + (request.client_name || "") + " ! Suite a votre demande Mazal Event, nous avons selectionne des prestataires pour vous.")}
+              target="_blank" rel="noreferrer"
+              style={{ display: "flex", alignItems: "center", gap: 8, background: "#25D366", color: "white", padding: "10px 20px", borderRadius: 50, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>
               <span>💬</span> Contacter
             </a>
           )}
@@ -159,26 +158,26 @@ export function RequestDetail({ request }: { request: FullRequest }) {
             <div className="section-title">Informations generales</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               {request.region && <div><span className="lbl">Region</span><div style={{ fontSize: 14 }}>📍 {request.region}</div></div>}
-              {c.date && <div><span className="lbl">Date</span><div style={{ fontSize: 14 }}>📅 {new Date(String(c.date)).toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" })}</div></div>}
-              {c.guests && <div><span className="lbl">Invites</span><div style={{ fontSize: 14 }}>👥 {String(c.guests)}</div></div>}
-              {c.budget && (
+              {cDate && <div><span className="lbl">Date</span><div style={{ fontSize: 14 }}>📅 {cDate}</div></div>}
+              {cGuests && <div><span className="lbl">Invites</span><div style={{ fontSize: 14 }}>👥 {cGuests}</div></div>}
+              {cBudget && (
                 <div style={{ gridColumn: "1/-1" }}>
                   <span className="lbl">Budget evenement</span>
-                  <div style={{ fontSize: 14, color: GOLD, fontWeight: 600 }}>{String(c.budget)}</div>
+                  <div style={{ fontSize: 14, color: GOLD, fontWeight: 600 }}>{cBudget}</div>
                 </div>
               )}
-              {Array.isArray(c.style) && c.style.length > 0 && (
+              {cStyle && (
                 <div style={{ gridColumn: "1/-1" }}>
                   <span className="lbl">Style</span>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
-                    {(c.style as string[]).map((s) => <span key={s} className="badge bg">{s}</span>)}
+                    {cStyle.map((s) => <span key={s} className="badge bg">{s}</span>)}
                   </div>
                 </div>
               )}
-              {c.comment && (
+              {cComment && (
                 <div style={{ gridColumn: "1/-1" }}>
                   <span className="lbl">Commentaire</span>
-                  <div style={{ fontSize: 14, color: MUTED, lineHeight: 1.6, marginTop: 4 }}>{String(c.comment)}</div>
+                  <div style={{ fontSize: 14, color: MUTED, lineHeight: 1.6, marginTop: 4 }}>{cComment}</div>
                 </div>
               )}
             </div>
@@ -188,6 +187,8 @@ export function RequestDetail({ request }: { request: FullRequest }) {
           {serviceList.map((s) => {
             const d = svcData[s.id] || {};
             const isOpen = openSvc === s.id;
+            const dLevel = d.level != null ? str(d.level) : null;
+            const dBudget = d.budget_svc != null ? str(d.budget_svc) : null;
             return (
               <div key={s.id} style={{ borderRadius: 16, border: "1.5px solid " + (isOpen ? GOLD : "#EDE0C4"), marginBottom: 8, overflow: "hidden", transition: "border-color .2s" }}>
                 <div onClick={() => setOpenSvc(isOpen ? null : s.id)}
@@ -197,8 +198,8 @@ export function RequestDetail({ request }: { request: FullRequest }) {
                     <span style={{ fontSize: 14, fontWeight: 500 }}>{s.label}</span>
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    {d.level && <span className="badge bg">{String(d.level)}</span>}
-                    {d.budget_svc && <span style={{ fontSize: 12, color: GOLD, fontWeight: 600 }}>{String(d.budget_svc)}</span>}
+                    {dLevel && <span className="badge bg">{dLevel}</span>}
+                    {dBudget && <span style={{ fontSize: 12, color: GOLD, fontWeight: 600 }}>{dBudget}</span>}
                     <span style={{ color: GOLD, fontSize: 16, display: "inline-block", transition: "transform .2s", transform: isOpen ? "rotate(90deg)" : "rotate(0deg)" }}>›</span>
                   </div>
                 </div>
