@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "motion/react";
 import { GOLD, MUTED, LEVELS, type Service } from "@/lib/constants";
 import { SERVICE_QUESTIONS } from "@/lib/questions";
 import { QuestionField } from "@/components/shared/QuestionField";
@@ -13,6 +14,14 @@ type Props = {
   total: number;
   onConfirm: (d: ServiceData) => void;
   onBack: () => void;
+};
+
+const levelsContainer = {
+  animate: { transition: { staggerChildren: 0.08, delayChildren: 0.25 } },
+};
+const levelVariants = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 export function ServiceFormPage({ service, step, total, onConfirm, onBack }: Props) {
@@ -29,37 +38,66 @@ export function ServiceFormPage({ service, step, total, onConfirm, onBack }: Pro
           <div className="badge bg">Prestations</div>
           <span style={{ fontSize: 13, color: MUTED }}>{step + 1} / {total}</span>
         </div>
-        <div className="pbar"><div className="pfill" style={{ width: pct + "%" }} /></div>
+        <div className="pbar">
+          <motion.div
+            className="pfill"
+            initial={{ width: 0 }}
+            animate={{ width: pct + "%" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          />
+        </div>
       </div>
-      <div style={{ marginBottom: 24, marginTop: 24 }}>
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} style={{ marginBottom: 24, marginTop: 24 }}>
         <span style={{ fontSize: 36 }}>{service.emoji}</span>
         <h2 className="serif" style={{ fontSize: 30, fontWeight: 300, marginTop: 8 }}>
           <em style={{ color: GOLD }}>{service.label}</em>
         </h2>
-      </div>
+      </motion.div>
       <div style={{ marginBottom: 28 }}>
         <div className="section-title">Niveau souhaite</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+        <motion.div
+          variants={levelsContainer}
+          initial="initial"
+          animate="animate"
+          style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}
+        >
           {LEVELS.map((lv) => (
-            <div key={lv.id} className={data.level === lv.id ? "lvl lvl-sel" : "lvl"} onClick={() => set("level", lv.id)}>
+            <motion.div
+              key={lv.id}
+              variants={levelVariants}
+              whileHover={{ y: -3 }}
+              transition={{ duration: 0.2 }}
+              className={data.level === lv.id ? "lvl lvl-sel" : "lvl"}
+              onClick={() => set("level", lv.id)}
+            >
               {lv.star && <div className="lvl-rec-tag">IDEAL</div>}
               <div style={{ fontWeight: 500, fontSize: 14, marginBottom: 4 }}>{lv.label}</div>
               <div style={{ fontSize: 11, color: MUTED, lineHeight: 1.3 }}>{lv.desc}</div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
       {questions.length > 0 && (
-        <div style={{ marginBottom: 28 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+          style={{ marginBottom: 28 }}
+        >
           <div className="section-title">Vos preferences</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {questions.map((q) => (
               <QuestionField key={q.id} q={q} value={data[q.id]} onChange={(v) => set(q.id, v)} />
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
-      <div style={{ marginBottom: 32 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.5 }}
+        style={{ marginBottom: 32 }}
+      >
         <span className="lbl">Commentaire specifique</span>
         <textarea
           className="inp"
@@ -67,10 +105,16 @@ export function ServiceFormPage({ service, step, total, onConfirm, onBack }: Pro
           value={(data.comment as string) || ""}
           onChange={(e) => set("comment", e.target.value)}
         />
-      </div>
-      <button className="btn-gold" onClick={() => onConfirm(data)}>
+      </motion.div>
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+        className="btn-gold"
+        onClick={() => onConfirm(data)}
+      >
         {step < total - 1 ? "Prestation suivante" : "Voir le resume"}
-      </button>
+      </motion.button>
     </div>
   );
 }

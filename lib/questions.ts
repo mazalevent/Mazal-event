@@ -70,23 +70,11 @@ export const SERVICE_QUESTIONS: Record<string, Question[]> = {
     { id: "palette", label: "Couleurs", type: "chips", multi: true, opts: ["Blanc et or", "Rose poudre", "Champagne", "Bordeaux", "Bleu marine"] },
     budgetSvcQ,
   ],
-  houppa: [
-    { id: "houppa_besoin", label: "Besoin", type: "chips", multi: false, opts: ["Structure + Decoration", "Decoration uniquement", "Structure seule"] },
-    { id: "houppa_style", label: "Style", type: "chips", multi: false, opts: ["Traditionnel", "Moderne", "Luxe floral", "Oriental"] },
-    budgetSvcQ,
-  ],
   invit: [
     { id: "format_inv", label: "Format", type: "tiles", multi: true, opts: [{ v: "digital", l: "Digital WhatsApp", e: "📱" }, { v: "print", l: "Impression papier", e: "🖨" }, { v: "video", l: "Video invitation", e: "🎥" }, { v: "box", l: "Box luxe", e: "📦" }] },
     { id: "langue_inv", label: "Langues", type: "chips", multi: true, opts: ["Hebreu", "Francais", "Anglais", "Russe", "Arabe"] },
     { id: "style_inv", label: "Style", type: "chips", multi: false, opts: ["Classique", "Moderne", "Oriental", "Luxe et or"] },
     budgetSvcQ,
-  ],
-  traiteur: [
-    { id: "type_repas", label: "Type de repas", type: "chips", multi: false, opts: ["Viande", "Lait", "Parve", "Mixte"] },
-    { id: "cacherout", label: "Cacherout", type: "chips", multi: false, opts: ["Badatz", "Rabanut", "Sans certificat", "Peu importe"] },
-    { id: "service_type", label: "Type de service", type: "chips", multi: false, opts: ["Buffet", "Service a table", "Cocktail", "Mixte"] },
-    { id: "plats", label: "Specialites", type: "chips", multi: true, opts: ["Oriental", "Europeen", "Grillades", "Poisson", "Vegetarien", "Fusion"] },
-    { id: "budget_trait", label: "Budget par personne NIS", type: "range", min: 80, max: 500, step: 20, unit: "NIS", marks: [{ v: 80, l: "80" }, { v: 150, l: "150" }, { v: 300, l: "300" }, { v: 500, l: "500" }] },
   ],
   makeup: [
     { id: "pour_qui", label: "Pour qui", type: "chips", multi: true, opts: ["Mariee Bat-Mitsva", "Maman", "Soeurs", "Famille"] },
@@ -95,33 +83,9 @@ export const SERVICE_QUESTIONS: Record<string, Question[]> = {
     { id: "coiffure", label: "Coiffure aussi", type: "chips", multi: false, opts: ["Oui les deux", "Maquillage uniquement", "Coiffure uniquement"] },
     budgetSvcQ,
   ],
-  robe: [
-    { id: "type_robe", label: "Type de tenue", type: "chips", multi: true, opts: ["Robe de mariee", "Robe de soiree", "Costume homme", "Tenue Mitsva"] },
-    { id: "style_robe", label: "Style", type: "chips", multi: false, opts: ["Princesse", "Sirene", "Minimaliste", "Oriental", "Moderne"] },
-    { id: "budget_robe", label: "Budget", type: "chips", multi: false, opts: ["Moins de 1000", "1000 a 3000", "3000 a 6000", "6000 et plus"] },
-    { id: "location", label: "Location ou achat", type: "chips", multi: false, opts: ["Achat", "Location", "Les deux"] },
-    budgetSvcQ,
-  ],
   effets: [
     { id: "type_effets", label: "Effets", type: "chips", multi: true, opts: ["Fontaines de feu", "Machine a fumee", "Confettis", "Laser show", "Mapping video"] },
     { id: "moment_effets", label: "Moment", type: "chips", multi: true, opts: ["Entree des maries", "Premiere danse", "Houppa", "Finale"] },
-    budgetSvcQ,
-  ],
-  gateau: [
-    { id: "type_gateau", label: "Type", type: "chips", multi: true, opts: ["Piece montee", "Wedding cake", "Candy bar", "Table de desserts"] },
-    { id: "saveur", label: "Saveurs", type: "chips", multi: true, opts: ["Vanille", "Chocolat", "Pistache", "Fruits rouges", "Sans gluten", "Parve"] },
-    { id: "casher_gat", label: "Cacherout", type: "chips", multi: false, opts: ["Avec certificat", "Sans certificat", "Peu importe"] },
-    budgetSvcQ,
-  ],
-  cadeaux: [
-    { id: "type_cadeau", label: "Type", type: "chips", multi: true, opts: ["Dragees", "Bougies", "Aimants photo", "Box gourmande", "Objet personnalise"] },
-    { id: "budget_cad", label: "Budget", type: "chips", multi: false, opts: ["Moins de 10", "10 a 20", "20 a 40", "40 et plus"] },
-    { id: "nb_cadeaux", label: "Quantite", type: "chips", multi: false, opts: ["Moins de 50", "50 a 100", "100 a 200", "200 et plus"] },
-    budgetSvcQ,
-  ],
-  voiture: [
-    { id: "type_voit", label: "Type", type: "chips", multi: true, opts: ["Limousine", "Rolls-Royce", "Cabriolet", "Vintage", "SUV de luxe"] },
-    { id: "usage_voit", label: "Usage", type: "chips", multi: true, opts: ["Transport maries", "Cortege", "Photos", "Navette VIP"] },
     budgetSvcQ,
   ],
 };

@@ -12,15 +12,9 @@ export const SERVICES: Service[] = [
   { id: "orch",     label: "Orchestre",              emoji: "🎺" },
   { id: "chant",    label: "Chanteur",               emoji: "🎤" },
   { id: "deco",     label: "Decoration",             emoji: "🌸" },
-  { id: "houppa",   label: "Houppa",                 emoji: "🕍" },
   { id: "invit",    label: "Invitations",            emoji: "✉" },
-  { id: "traiteur", label: "Traiteur",               emoji: "🍽" },
   { id: "makeup",   label: "Maquillage Coiffure",    emoji: "💄" },
-  { id: "robe",     label: "Robe Tenue",             emoji: "👗" },
   { id: "effets",   label: "Effets speciaux",        emoji: "✨" },
-  { id: "gateau",   label: "Gateau Candy bar",       emoji: "🎂" },
-  { id: "cadeaux",  label: "Cadeaux invites",        emoji: "🎁" },
-  { id: "voiture",  label: "Voiture evenement",      emoji: "🚗" },
 ];
 
 export type EventType = { id: string; label: string; emoji: string; desc: string };
