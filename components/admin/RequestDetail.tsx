@@ -36,7 +36,7 @@ function ServiceDetailPanel({ data }: { data: Record<string, unknown> }) {
   if (entries.length === 0 && !data.comment && !data.level) return null;
   return (
     <div style={{ background: "#FDF8EE", borderRadius: "0 0 16px 16px", padding: "16px 20px", borderTop: "1px solid rgba(201,168,76,.15)" }}>
-      {data.level && (
+      {data.level !== undefined && data.level !== null && (
         <div style={{ marginBottom: 12 }}>
           <span className="lbl">Niveau</span>
           <span className="badge bg">{String(data.level)}</span>
