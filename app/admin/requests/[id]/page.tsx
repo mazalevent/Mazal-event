@@ -54,15 +54,24 @@ export type OffreRow = {
   selected_for_client: boolean;
 };
 
+export type PropositionRow = {
+  token: string;
+  offre_ids: string[];
+  created_at: string;
+  opened_at: string | null;
+  interests: Record<string, boolean> | null;
+};
+
 export default async function RequestPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
 
-  const [requestRes, prestatairesRes, invitesRes, offresRes] = await Promise.all([
+  const [requestRes, prestatairesRes, invitesRes, offresRes, propositionsRes] = await Promise.all([
     supabase.from("requests").select("*").eq("id", id).single(),
     supabase.from("prestataires").select("id, name, email, phone, services, region"),
     supabase.from("prestataire_invites").select("token, service_id, prestataire_id, email_sent_to, created_at, used_at").eq("request_id", id),
     supabase.from("offres").select("id, service_id, prix, description, dispo, delai, note, received_at, prestataire_id, invite_token, selected_for_client").eq("request_id", id),
+    supabase.from("proposition_tokens").select("token, offre_ids, created_at, opened_at, interests").eq("request_id", id).order("created_at", { ascending: false }),
   ]);
 
   if (requestRes.error || !requestRes.data) notFound();
@@ -73,6 +82,7 @@ export default async function RequestPage({ params }: { params: Promise<{ id: st
       prestataires={(prestatairesRes.data as PrestataireLite[]) || []}
       invites={(invitesRes.data as InviteRow[]) || []}
       offres={(offresRes.data as OffreRow[]) || []}
+      propositions={(propositionsRes.data as PropositionRow[]) || []}
     />
   );
 }
