@@ -1,6 +1,8 @@
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { notifyAdminNewOffer, getAppUrl } from "@/lib/email";
+import { SERVICES } from "@/lib/constants";
 
 export type SubmitOfferInput = {
   token: string;
@@ -53,6 +55,27 @@ export async function submitOffer(input: SubmitOfferInput): Promise<SubmitOfferR
     .from("prestataire_invites")
     .update({ used_at: new Date().toISOString() })
     .eq("token", input.token);
+
+  // Notif admin best-effort
+  try {
+    const [{ data: presta }, { data: req }] = await Promise.all([
+      invite.prestataire_id
+        ? supabase.from("prestataires").select("name").eq("id", invite.prestataire_id).single()
+        : Promise.resolve({ data: null }),
+      supabase.from("requests").select("client_name").eq("id", invite.request_id).single(),
+    ]);
+    const service = SERVICES.find((s) => s.id === invite.service_id);
+    await notifyAdminNewOffer({
+      prestataireName: presta?.name || "Prestataire",
+      serviceLabel: service?.label || invite.service_id,
+      clientName: req?.client_name || "Client",
+      prix: input.prix,
+      requestId: invite.request_id,
+      appUrl: getAppUrl(),
+    });
+  } catch (e) {
+    console.error("[submitOffer] Email notif admin echec :", e);
+  }
 
   return { ok: true };
 }

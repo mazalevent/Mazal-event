@@ -1,8 +1,10 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { isValidEmail, isValidIsraeliPhone } from "@/lib/validation";
-import type { EventType } from "@/lib/constants";
+import { notifyAdminNewRequest, getAppUrl } from "@/lib/email";
+import { SERVICES, type EventType } from "@/lib/constants";
 import type { FormsData } from "@/components/client/FormsOrchestrator";
 
 type SubmitPayload = {
@@ -34,7 +36,6 @@ export async function submitRequest(payload: SubmitPayload): Promise<SubmitResul
 
   const supabase = await createClient();
 
-  // Pas de .select() ici : l'anon n'a pas le droit de relire (RLS), on ne renvoie pas l'id
   const { error } = await supabase
     .from("requests")
     .insert({
@@ -44,8 +45,36 @@ export async function submitRequest(payload: SubmitPayload): Promise<SubmitResul
       client_email: email,
     });
 
-  if (error) {
-    return { ok: false, error: error.message };
+  if (error) return { ok: false, error: error.message };
+
+  // Notif admin best-effort (ne bloque pas le retour client en cas d'echec)
+  try {
+    const adminClient = createAdminClient();
+    const { data: latest } = await adminClient
+      .from("requests")
+      .select("id")
+      .eq("client_email", email)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+    const region = typeof common.region === "string" ? common.region : null;
+    const serviceLabels = payload.services.map((sid) => {
+      const s = SERVICES.find((x) => x.id === sid);
+      return s ? s.emoji + " " + s.label : sid;
+    });
+    await notifyAdminNewRequest({
+      clientName: name,
+      clientPhone: phone,
+      clientEmail: email,
+      eventLabel: payload.eventType.label,
+      services: serviceLabels,
+      region,
+      requestId: latest?.id ?? "",
+      appUrl: getAppUrl(),
+    });
+  } catch (e) {
+    console.error("[submitRequest] Email notif admin echec :", e);
   }
+
   return { ok: true };
 }

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { generatePropositionToken } from "@/lib/tokens";
+import { sendClientProposition, getAppUrl } from "@/lib/email";
 
 export type SendResult =
   | { ok: true; token: string }
@@ -36,6 +37,28 @@ export async function createProposition(
     .eq("id", requestId);
 
   revalidatePath("/admin/requests/" + requestId);
+
+  // Envoi email client en best-effort si email present
+  try {
+    const { data: req } = await supabase
+      .from("requests")
+      .select("client_name, client_email, event_type")
+      .eq("id", requestId)
+      .single();
+    if (req?.client_email) {
+      const eventLabel = (req.event_type as { label?: string } | null)?.label || "événement";
+      await sendClientProposition({
+        toEmail: req.client_email,
+        clientName: req.client_name,
+        eventLabel,
+        url: getAppUrl() + "/o/" + token,
+        offerCount: offreIds.length,
+      });
+    }
+  } catch (e) {
+    console.error("[createProposition] Email client echec :", e);
+  }
+
   return { ok: true, token };
 }
 
