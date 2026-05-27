@@ -87,12 +87,6 @@ export function SummaryPage({ eventType, services, formsData, onBack, onSubmit, 
           {Boolean(c.guests) && (
             <div><span className="lbl">Invites</span><div style={{ fontSize: 14 }}>{String(c.guests)}</div></div>
           )}
-          {Boolean(c.budget) && (
-            <div style={{ gridColumn: "1/-1" }}>
-              <span className="lbl">Budget événement</span>
-              <div style={{ fontSize: 14, color: GOLD, fontWeight: 600 }}>{String(c.budget)}</div>
-            </div>
-          )}
           {Array.isArray(c.style) && c.style.length > 0 && (
             <div style={{ gridColumn: "1/-1" }}>
               <span className="lbl">Style</span>

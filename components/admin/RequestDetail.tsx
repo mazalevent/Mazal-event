@@ -117,7 +117,6 @@ export function RequestDetail({
     ? new Date(c.date).toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" })
     : null;
   const cGuests  = c.guests  != null ? str(c.guests)  : null;
-  const cBudget  = c.budget  != null ? str(c.budget)  : null;
   const cComment = typeof c.comment === "string" && c.comment ? c.comment : null;
   const cStyle   = Array.isArray(c.style) && c.style.length > 0 ? c.style as string[] : null;
 
@@ -183,7 +182,6 @@ export function RequestDetail({
               {request.region && <div><span className="lbl">Region</span><div style={{ fontSize: 14 }}>📍 {request.region}</div></div>}
               {cDate    && <div><span className="lbl">Date</span><div style={{ fontSize: 14 }}>📅 {cDate}</div></div>}
               {cGuests  && <div><span className="lbl">Invites</span><div style={{ fontSize: 14 }}>👥 {cGuests}</div></div>}
-              {cBudget  && <div style={{ gridColumn: "1/-1" }}><span className="lbl">Budget</span><div style={{ fontSize: 14, color: GOLD, fontWeight: 600 }}>{cBudget}</div></div>}
               {cStyle   && (
                 <div style={{ gridColumn: "1/-1" }}>
                   <span className="lbl">Style</span>

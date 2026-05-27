@@ -22,8 +22,6 @@ export const COMMON_QUESTIONS: Question[] = [
   { id: "region",  label: "Région de l'événement",          type: "chips",    multi: false, opts: REGIONS },
   { id: "date",    label: "Date de l'événement",            type: "date" },
   { id: "guests",  label: "Nombre d'invités (si pertinent)", type: "chips",   multi: false, opts: ["Moins de 50", "50 à 100", "100 à 150", "150 à 200", "200 à 300", "300 à 400", "400 et plus"], optional: true },
-  { id: "budget",  label: "Budget global de l'événement",   type: "chips",    multi: false,
-    opts: ["Moins de 20 000 NIS", "20 000 à 50 000 NIS", "50 000 à 100 000 NIS", "100 000 à 150 000 NIS", "150 000 à 250 000 NIS", "250 000 NIS et plus"] },
   { id: "style",   label: "Style de l'événement",           type: "chips",    multi: true,  opts: STYLES, optional: true },
   { id: "comment", label: "Informations complémentaires",   type: "textarea", placeholder: "Détails importants...", optional: true },
 ];
